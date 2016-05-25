@@ -32,7 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, type: 'dhcp'
+  # ubuntu 16 and vagrant 1.8.1 workaround https://github.com/mitchellh/vagrant/issues/7155#issuecomment-199059329
+  config.vm.network :private_network, type: 'dhcp', auto_config: false
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
