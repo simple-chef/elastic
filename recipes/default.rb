@@ -11,6 +11,7 @@
 apt_repository 'elastic' do
   uri "http://packages.elastic.co/elasticsearch/#{node['elastic']['version_to_install']}/debian"
   components ['stable', 'main']
+  distribution ''
   key 'https://packages.elastic.co/GPG-KEY-elasticsearch'
 end
 package 'elasticsearch'
@@ -19,13 +20,14 @@ package 'elasticsearch'
 
 
 # run it
-simple-chef-tools_safebash "run elasticsearch" do
-  code <<-EOH
-    /bin/systemctl daemon-reload
-    /bin/systemctl enable elasticsearch.service
-    /bin/systemctl start elasticsearch.service
-  EOH
+service "elasticsearch" do
+  action :enable
 end
+
+service "elasticsearch" do
+  action :start
+end
+
 
 
 

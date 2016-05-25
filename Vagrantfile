@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  #config.vm.hostname = 'elastic-berkshelf'
+  #config.vm.hostname = 'elastic'
 
   # Set the version of chef to install using the vagrant-omnibus plugin
   # NOTE: You will need to install the vagrant-omnibus plugin:
@@ -33,7 +33,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
   # ubuntu 16 and vagrant 1.8.1 workaround https://github.com/mitchellh/vagrant/issues/7155#issuecomment-199059329
-  config.vm.network :private_network, type: 'dhcp', auto_config: false
+  #config.vm.network :private_network, type: 'dhcp', auto_config: false
+  config.vm.network :private_network, ip: '192.168.44.66', auto_config: false
+
+  #todo: provision sudo ifconfig enp0s8 192.168.44.66
+  # try running ifconfig -a to see the name of the card
+  # todo: add host name to /etc/hosts
+
+  cookbooks_path = 'cookbooks'
+  # workaround instead of berkshelf plugin
+  config.trigger.before [:up, :provision] , :stdout => true do
+    info 'Cleaning cookbook directory'
+    run "rm -rf #{cookbooks_path}"
+    info 'Installing cookbook dependencies with berkshelf'
+    run "berks update"
+    run "berks vendor #{cookbooks_path}"
+    # seems like berkshelf doesnt respect our chefignore path
+    #run "rm -rf #{cookbooks_path}/zdg/#{cookbooks_path} #{cookbooks_path}/zdg/data #{cookbooks_path}/zdg/.idea"
+  end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -65,7 +82,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Enabling the Berkshelf plugin. To enable this globally, add this configuration
   # option to your ~/.vagrant.d/Vagrantfile file
-  config.berkshelf.enabled = true
+  # config.berkshelf.enabled = true
 
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to exclusively install and copy to Vagrant's shelf.
@@ -75,17 +92,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
 
+  #config.vm.provision 'shell', inline: "ifconfig enp0s8 192.168.44.66"
+
   config.vm.provision :chef_solo do |chef|
-    chef.json = {
-      mysql: {
-        server_root_password: 'rootpass',
-        server_debian_password: 'debpass',
-        server_repl_password: 'replpass'
-      }
-    }
+#     chef.json = {
+#       mysql: {
+#         server_root_password: 'rootpass',
+#         server_debian_password: 'debpass',
+#         server_repl_password: 'replpass'
+#       }
+#     }
 
     chef.run_list = [
       'recipe[elastic::default]'
     ]
+    chef.synced_folder_type = "nfs"
   end
 end
