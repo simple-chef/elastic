@@ -10,7 +10,7 @@ pkg/
 .vagrant
 /cookbooks
 Berksfile.lock
-
+ubuntu-xenial-16.04-cloudimg-console.log
 # Bundler
 Gemfile.lock
 bin/*
