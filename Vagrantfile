@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   # If this value is a shorthand to a box in Vagrant Cloud then
   # config.vm.box_url doesn't need to be specified.
-  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'geerlingguy/ubuntu1604'
 
 
   # Assign this VM to a host-only network IP, allowing you to access it
@@ -34,7 +34,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # network interface) by any external networks.
   # ubuntu 16 and vagrant 1.8.1 workaround https://github.com/mitchellh/vagrant/issues/7155#issuecomment-199059329
   #config.vm.network :private_network, type: 'dhcp', auto_config: false
-  config.vm.network :private_network, ip: '192.168.44.66', auto_config: false
+  config.vm.network :private_network, ip: '192.168.44.66'
+#   , auto_config: false
 
   #todo: provision sudo ifconfig enp0s8 192.168.44.66
   # try running ifconfig -a to see the name of the card
@@ -106,6 +107,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = [
       'recipe[elastic::default]'
     ]
-    chef.synced_folder_type = "nfs"
+#     chef.synced_folder_type = "nfs"
   end
 end

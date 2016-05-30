@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+package 'openjdk-8-jre'
+
 # Install elastic search
 apt_repository 'elastic' do
   uri "http://packages.elastic.co/elasticsearch/#{node['elastic']['version_to_install']}/debian"
@@ -33,7 +35,7 @@ end
 
 # curator recipe itself checks if it is enabled in attributes
 
-include_recipe 'elastic::curator'
+# include_recipe 'elastic::curator'
 
 # plugins - according to settings :)
 
