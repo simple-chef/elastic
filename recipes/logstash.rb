@@ -6,3 +6,12 @@ apt_repository 'logstash' do
 end
 
 package 'logstash'
+
+# TODO: check if its needed ...
+# service "logstash" do
+#   action :enable
+# end
+#
+# service "logstash" do
+#   action :start
+# end
