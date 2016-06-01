@@ -6,4 +6,5 @@ description      'Elastic search'
 long_description 'Elastic search'
 version          '0.1.0'
 
+depends 'apt'
 depends 'simple-chef-tools'
