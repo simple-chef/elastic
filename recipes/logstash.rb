@@ -6,7 +6,10 @@ apt_repository 'logstash' do
   key 'https://packages.elastic.co/GPG-KEY-elasticsearch'
 end
 
-package 'logstash'
+# todo: shouldnt be necessary !
+apt_package 'logstash' do
+  options "--allow-unauthenticated"
+end
 
 # TODO: check if its needed ...
 # service "logstash" do
